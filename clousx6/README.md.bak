@@ -1,0 +1,4 @@
+# Websocket_protocol_plugin
+
+clousx6版本的websocket服务端启动方式为当插件被注册的时候启动，所以每次登陆机器人都必须刷新插件，不然服务端不会启动。
+
