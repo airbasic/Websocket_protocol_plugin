@@ -30,11 +30,11 @@ Client端发送到Server端的信息应该为
  {
   "from": "client",
   "msgparams": {
-  "method": "send_message",操作类型 send_message表示发送消息
-  "message": "",要发送的文字消息内容 str String
-  "groupid": 0,群号 int long
-  "type": 1,消息类型 1txt 2xml 3json 12文字+图片 int long
-  "img_path": "",图片路径，可以是文件，可以是链接 /sdcard/1.png或者http://***.png 不发图可以是空
+  "method": "send_message",   //操作类型 send_message表示发送消息
+  "message": "",   //要发送的文字消息内容 str String
+  "groupid": 0,   //群号 int long
+  "type": 1,   //消息类型 1txt 2xml 3json 12文字+图片 int long
+  "img_path": "",   //图片路径，可以是文件，可以是链接 /sdcard/1.png或者http://***.png 不发图可以是空
   }
  }
 ```
@@ -44,12 +44,12 @@ Client端发送到Server端的信息应该为
  {
   "from": "client",
   "msgparams": {
-   method": "mamber_manager",操作类型 mamber_manager表示群管操作
-   "message": "",改名片的名片内容 str String
-   "qquin": 0,禁言等操作的qq号 int long
-   "groupid": 0,群号 int long
-   "type": 0,消息类型 7:禁言 10:踢人 11:改名片
-   "time": 0,禁言秒数 int long
+   method": "mamber_manager",   // 操作类型 mamber_manager表示群管操作
+   "message": "",   //改名片的名片内容 str String
+   "qquin": 0,   //禁言等操作的qq号 int long
+   "groupid": 0,   //群号 int long
+   "type": 0,   //消息类型 7:禁言 10:踢人 11:改名片
+   "time": 0,   //禁言秒数 int long
   }
  }
 ```
