@@ -1,8 +1,6 @@
 # Websocket_protocol_plugin
 websocket协议插件对接其他编程语言
 
-本项目由插件通过websocket跟其他语言对接实现
-
 example里会增加一些其他语言的插件demo演示
 
 
