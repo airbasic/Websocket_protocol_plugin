@@ -1,8 +1,6 @@
 # Websocket_protocol_plugin
 
-clousx6版本的websocket服务端启动方式为当插件被注册的时候启动，所以每次登陆机器人都必须刷新插件，不然服务端不会启动。
-
-clousx6截止最后版本 2.8.1
+sqv8版本的websocket服务端启动方式也是当插件被注册的时候启动，所以每次登陆机器人都必须刷新插件，不然服务端不会启动。
 
 插件监听8888端口。以json方式传输数据。
 websocket server端下发至Client端的信息为:
