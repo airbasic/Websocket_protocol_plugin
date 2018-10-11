@@ -1,0 +1,45 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.robot_sq.websocket"
+    android:versionCode="1"
+    android:versionName="1.0" >
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 修改或删除您的USB存储设备中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 拥有完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+	
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+		android:supportsRtl="true"
+        android:label="@string/app_name"
+		android:theme="@style/AppTheme">
+        <meta-data android:name="class" android:value="com.robot_sq.websocket.Main"/>
+        <meta-data android:name="author" android:value="Tick Tock"/>
+        <meta-data android:name="info" android:value="Websocket Server"/>
+        <meta-data android:name="jump" android:value="true"/>
+        <!-- 插件UI注册 -->
+        <activity android:name=".MainActivity"
+			android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter >
+                <!-- 主程序跳转 -->
+                <action android:name="saki.setqq.plugin.v8.main"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <!-- 桌面图标 -->
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+         </activity>
+                 <activity android:name=".Test1Activity"
+					 android:label="@string/app_name"
+					 android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>
