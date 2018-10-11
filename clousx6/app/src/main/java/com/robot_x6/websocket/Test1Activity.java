@@ -34,8 +34,20 @@ public class Test1Activity extends AppCompatActivity {
 		final ArrayList<String> list = new ArrayList<>();
 		
 		
+<<<<<<< HEAD
 		
 		
+=======
+		listView = (ListView)findViewById(R.id.contenttestListView1);
+		
+  
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(adapter);
+        
+			
+			
+	
+>>>>>>> 7b2ad99ad6d3e1b1536e8e9381170e3343d146f7
     }
 		
     
