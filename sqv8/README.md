@@ -30,18 +30,6 @@ Client端发送到Server端的信息应该为
  {
   "from": "client",
   "msgparams": {
-  "method": "send_message",   //操作类型 send_message表示发送消息
-  "message": "",   //要发送的文字消息内容 str String
-  "groupid": 0,   //群号 int long
-  "type": 1,   //消息类型 1txt 2xml 3json 12文字+图片 int long
-  "img_path": "",   //图片路径，可以是文件，可以是链接 /sdcard/1.png或者http://***.png 不发图可以是空
-  }
- }
-```
-```json
- {
-  "from": "client",
-  "msgparams": {
    "method": 操作类型 "send_message":发送消息,
    "message": 消息内容, 
    "message_type": 消息内容类型 msg为文本 xml为卡片 json为json消息 img为图片消息, 
