@@ -6,11 +6,13 @@ if which jq >/dev/null;then
     y=y
 else
     echo "jq not found,try apt install jq first"
+    exit
 fi
 if which ncat >/dev/null;then
     y=y
 else
     echo "ncat not found,try apt install ncat first"
+    exit
 fi
 # ====== Set the constants below =======
 killall -9 ncat
