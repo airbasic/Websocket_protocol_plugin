@@ -6,13 +6,11 @@ if which jq >/dev/null;then
     y=y
 else
     echo "jq not found,try apt install jq first"
-    exit
 fi
 if which ncat >/dev/null;then
     y=y
 else
     echo "ncat not found,try apt install ncat first"
-    exit
 fi
 # ====== Set the constants below =======
 killall -9 ncat
@@ -203,7 +201,6 @@ pong=$(printf "\x8a")
 loop(){
 while read -n 1 line
     do
-        echo $line >/sdcard/1
        if [[ $line == "" ]];then
               line=" "
        else
@@ -238,16 +235,27 @@ self=$0
 nc1_pid=$!
 nc2_pid=`jobs -p`
 
+retry=$@
+if [[ $retry == "" ]];then
+    retry=0
+fi
+echo $retry
+
 while true;do
 sleep 30
-echo "发送心跳ping"
+echo "发送心跳Ping"
 if printf "\x89\x00"| ncat localhost $WS_LOCAL_PORT;then
     echo "connection is alive"
 else
     echo "connection is dead,try to reconnect"
-    $0
+    if [[ $retry -lt 30 ]];then
+        $0 $((retry +1))
+    else
+        echo "max retry";
+    fi
     killall -9 sleep
-    break 
+    kill -9 $! $$
+    break
     exit 
 fi
 done &
