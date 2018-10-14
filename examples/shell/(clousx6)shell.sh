@@ -80,27 +80,28 @@ Sec-WebSocket-Version: 13\r\n\r\n"
 
 
 sendMessage(){
-local type="$1";
-local groupid="$2";
-local message="$3";
-local message_type="$4";
-local qquin="$5";
-local time="$6";
-local code="$7";
-local title="$8";
-local value="$9";
-local groupidName=${10};
-message_to_send="{\"from\": \"client\", \"msgparams\": {\"method\": \"send_message\", \"message\": \"$message\", \"message_type\": \"$message_type\", \"groupid\": $groupid, \"qquin\": $qquin, \"type\": $type, \"title\": \"$title\", \"time\": $time, \"code\": $code, \"value\": $value}}"
+local message_to_send="$1"
+local groupid="$2"
+local type="$3"
+local img_path_to_send="$4"
+message_to_send="{\"from\": \"client\", \"msgparams\": {\"method\": \"send_message\", \"message\": \"$message_to_send\", \"groupid\": $groupid, \"type\": $type, \"img_path\": \"$img_path_to_send\"}}"
 echo "$message_to_send" |ws_send| ncat localhost $WS_LOCAL_PORT
-if [[ $type == 0 || $type == 2 ]];then
-    echo "发送群组消息 群:$groupidName 消息:$message"
-elif [[ $type == 1 ]];then
-    echo "发送好友消息 qq:$sendid 消息:$message"
-elif [[ $type == 4 ]];then
-    echo "发送私聊消息 群:$groupid qq:$sendid 消息:$message"
-fi
+echo "发送群组消息 群:$groupidName 消息:$message"
 }
 
+
+
+memberManager(){
+local message_to_send="$1";
+local qquin="$2";
+local groupid="$3";
+local type="$4";
+local time="$5";
+message_to_send="{\"from\": \"client\", \"msgparams\": {\"method\": \"mamber_manager\", \"message\": \"$message_to_send\", \"qquin\": $qquin, \"groupid\": $groupid, \"type\": $type, \"time\": $time}}"
+echo "$message_to_send" |ws_send| ncat localhost $WS_LOCAL_PORT
+}
+    
+    
 
 onQQmessage(){
 local type=$1;
@@ -113,10 +114,10 @@ local ATname=$7;
 local robort=$8;
 local sendtime=$9;
 local groupidName=${10};
-local code=0;
-if [ $type = 4 ];then
-    code=$groupid
+if [[ $msg =~ "], at=[" ]];then  
+    msg=$(echo "$msg"|sed "s/\], at=\[.*//g");
 fi
+    #socket----websocket对象
     #type----消息类型
     #groupid----群号码
     #sendid----信息发出者qq号码
@@ -127,27 +128,22 @@ fi
     #robort----登陆机器人qq号码
     #sendtime----消息发送时间
     #groupidName----群名称
-if [ $msg = "\"Hello\"" ];then
-      #@sendMessage(type,groupid,message,message_type,qquin,time,code,title,value)
-        #type----消息类型 0:群消息 1好友消息 2:讨论组 3:系统消息 4:群临时消息 9:设置群名片 10:成员禁言 11:全体禁言 12:踢人
+    if [[ $msg == "\"Hello\"" ]];then  #文本消息测试
+        #@sendMessage(socket,message_to_send,groupid,type,img_path_to_send)
+        #message_to_send----消息内容
         #groupid----群号
-        #message----消息内容
-        #message_type----消息内容类型 msg:文本 xml:卡片 img:图片 json:json消息
-        #qquin----发送目标qq/禁言qq/名片操作qq/踢人目标qq
-        #time----发送消息时间
-        #code----发送临时消息必须有这个，设置成跟群号一样就可以了
-        #title----改名片时的名片内容
-        #value----禁言时长(秒)
-    sendMessage "$type" "$groupid" "World" "msg" "$sendid" 0 "$code"  "" 0 "$groupidName"
-elif [ $msg = "\"测试卡片\"" ];then
-    sendMessage "$type" "$groupid" '<msg serviceID=\"2\" templateID=\"1\" action=\"web\" brief=\"酷狗音乐\" sourceMsgId=\"0\" url=\"\" flag=\"0\" adverSign=\"0\" multiMsgFlag=\"0\"><item layout=\"2\"><audio cover=\"http://singerimg.kugou.com/uploadpic/softhead/400/20170426/20170426152155521.jpg\" src=\"http://fs.w.kugou.com/201809150140/0fe84be3831cea79c86d693e721f0e7b/G012/M07/01/09/rIYBAFUKilCAV55kADj2J33IqoI680.mp3\" /><title>Innocence</title><summary>Avril Lavigne</summary></item><source name=\"酷狗音乐\" icon=\"http://url.cn/4Asex5p\" url=\"http://url.cn/SXih4O\" action=\"app\" a_actionData=\"com.kugou.android\" i_actionData=\"tencent205141://\" appid=\"205141\" /></msg>' "xml" "$sendid" 0 "$code"  "" 0 "$groupidName" #卡片最好用''单引号强制禁止转移
-elif [ $msg = "\"测试图片\"" ];then
-    sendMessage "$type" "$groupid" "https://i.loli.net/2018/10/10/5bbda09b17a1a.png" "img" "$sendid" 0 "$code"  "" 0 "$groupidName"
-elif [ $msg = "\"开启全体禁言\"" ];then #全体禁言
-    sendMessage 11 "$groupid" "" "" 0 0 0 "" 0 "$groupidName"
-elif [ $msg = "\"关闭全体禁言\"" ];then #全体禁言
-    sendMessage "$type" "$groupid" "貌似不支持关闭全体禁言" "msg" "$sendid" 0 "$code"  "" 0 "$groupidName"
+        #type----消息类型 1:文本消息 2:卡片消息 4:开启全体禁言 5:关闭全体禁言 8:加群 9: 退群  12: 文字加图片消息
+        sendMessage "World" $groupid 1 ""
+    elif [[ $msg == "\"测试卡片\"" ]];then #xml消息测试
+        sendMessage '<msg serviceID=\"2\" templateID=\"1\" action=\"web\" brief=\"酷狗音乐\" sourceMsgId=\"0\" url=\"\" flag=\"0\" adverSign=\"0\" multiMsgFlag=\"0\"><item layout=\"2\"><audio cover=\"http://singerimg.kugou.com/uploadpic/softhead/400/20170426/20170426152155521.jpg\" src=\"http://fs.w.kugou.com/201809150140/0fe84be3831cea79c86d693e721f0e7b/G012/M07/01/09/rIYBAFUKilCAV55kADj2J33IqoI680.mp3\" /><title>Innocence</title><summary>Avril Lavigne</summary></item><source name=\"酷狗音乐\" icon=\"http://url.cn/4Asex5p\" url=\"http://url.cn/SXih4O\" action=\"app\" a_actionData=\"com.kugou.android\" i_actionData=\"tencent205141://\" appid=\"205141\" /></msg>' $groupid 2 ""
+    elif [[ $msg == "\"测试图片\"" ]];then #图片消息测试
+        sendMessage "这是图片" $groupid 12 "https://i.loli.net/2018/10/10/5bbda09b17a1a.png"
+    elif  [[ $msg == "\"开启全体禁言\"" ]];then #全体禁言
+        sendMessage "World" $groupid 4 ""
+    elif  [[ $msg == "\"关闭全体禁言\"" ]];then #全体禁言
+        sendMessage "World" $groupid 5 ""
 fi
+#剩余的不再做演示
 
 }
 
@@ -182,13 +178,7 @@ robort=$(echo "$json_data"|jq ".robort")
 sendtime=$(echo "$json_data"|jq ".sendtime")
 groupidName=$(echo "$json_data"|jq ".groupidname")
 #终端输出消息
-if [[ $type == 0 || $type == 2 ]];then
-    echo "收到群组消息 群:$groupidName 消息:$msg"
-elif [[ $type == 1 ]];then
-    echo "收到好友消息 qq:$sendid 消息:$msg"
-elif [[ $type == 4 ]];then
-    echo "收到私聊消息 群:$groupid qq:$sendid 消息:$msg"
-fi
+echo "收到群组消息 群:$groupidName 成员:$nick 消息:$msg"
 onQQmessage "$type" "$groupid" "$sendid" "$msg" "$nick" "$ATQ" "$ATname" "$robort" "$sendtime" "$groupidName"
 }
 
